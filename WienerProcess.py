@@ -15,11 +15,12 @@ def generate_paths(S0, r, sigma, T, M, I):
     for t in range(1, M + 1):
         rand = np.random.standard_normal(I)
         rand = (rand - rand.mean())/rand.std()
-        paths[t] = paths[t - 1] * np.exp((r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * rand)
-
+        paths[t] = paths[t - 1] * \
+            np.exp((r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * rand)
 
     # must return ndarray - shape (M+1, I) # ndarray is n dimensional array
     return paths
+
 
 S0 = 100.
 r = 0.05
@@ -27,10 +28,10 @@ sigma = 0.2
 T = 100
 M = 50
 I = 250000
-    
+
 paths = generate_paths(S0, r, sigma, T, M, I)
 
-plt.plot(paths[:,10])
+plt.plot(paths[:, 10])
 
 
 def main():
