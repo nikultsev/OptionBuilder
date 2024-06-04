@@ -22,7 +22,7 @@ def generate_paths(S0, r, sigma, T, M, I):
     return paths
 
 
-S0 = 100.
+S0 = 100
 r = 0.05
 sigma = 0.2
 T = 100
