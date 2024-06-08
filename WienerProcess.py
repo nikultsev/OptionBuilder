@@ -5,6 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sympy
+from zoom_function import zoom_factory, rebind_pan_to_middle_click
 
 
 def generate_paths(S0, r, sigma, T, M, I):
@@ -22,46 +23,49 @@ def generate_paths(S0, r, sigma, T, M, I):
     return paths
 
 
-S0 = 100
-r = 0.05
-sigma = 0.2
-T = 100
-M = 50
-I = 250000
-
-paths = generate_paths(S0, r, sigma, T, M, I)
-
-plt.plot(paths[:, 10])
-
-
 def main():
 
     dtype = [('Date', 'U10'), ('Close/Last', 'f8'),
-             ('Open', 'f8'), ('High', 'f8'), ('Low', 'f8'),]
+             ('Open', 'f8'), ('High', 'f8'), ('Low', 'f8')]
     data = np.genfromtxt('HistoricalData_1717244350919.csv',
                          delimiter=',', dtype=dtype, names=True, encoding='utf-8')
 
-    # data = np.transpose(data)
+    fig, axs = plt.subplots(2, 3)
 
-    print(data.dtype)
+    S0 = 100.
+    r = 1
+    sigma = 0.5
+    T = 1.
+    M = 2531
+    I = 10
+
+    
+    #print(np.shape(paths))
+
     open_prices = data['Open']
     close_prices = data['CloseLast']
 
     interlaced = np.empty(
         (open_prices.size + close_prices.size), dtype=open_prices.dtype)
     interlaced[0::2] = open_prices
-
     interlaced[1::2] = close_prices
 
     double_date = np.repeat(data['Date'], 2)
     interlaced[interlaced == 0] = np.nan
+    print(np.shape(np.flip(interlaced)))
+    S0 = np.flip(interlaced)[0]
 
-    print(interlaced, len(interlaced), np.shape(interlaced))
-    plt.plot(np.flip(double_date), np.flip(interlaced))
-    plt.xticks([0])
-    # plt.plot(data['Open'])
+    paths = generate_paths(S0, r, sigma, T, M, I)
+    axs[0, 1].plot(paths[:, :10], linestyle = 'dashed')
+    axs[0, 1].plot(np.flip(double_date), np.flip(interlaced), label = 'S&P 500', color = 'black')
+    print(np.shape(paths[0]))
+    axs[0, 1].set_xticks([])
 
+    zoom_factory(axs[0, 1])
+    rebind_pan_to_middle_click()
+    
     plt.show()
+    fig.savefig('savedfig.png')
 
 
 if __name__ == "__main__":
