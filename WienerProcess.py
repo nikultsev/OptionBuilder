@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy
 from zoom_function import zoom_factory, rebind_pan_to_middle_click
+from derivative_classes import *  # ignores __main__ still
 
 
 def generate_paths(S0, r, sigma, T, M, I):
@@ -39,8 +40,7 @@ def main():
     M = 2531
     I = 10
 
-    
-    #print(np.shape(paths))
+    # print(np.shape(paths))
 
     open_prices = data['Open']
     close_prices = data['CloseLast']
@@ -56,14 +56,15 @@ def main():
     S0 = np.flip(interlaced)[0]
 
     paths = generate_paths(S0, r, sigma, T, M, I)
-    axs[0, 1].plot(paths[:, :10], linestyle = 'dashed')
-    axs[0, 1].plot(np.flip(double_date), np.flip(interlaced), label = 'S&P 500', color = 'black')
+    axs[0, 1].plot(paths[:, :10], linestyle='dashed')
+    axs[0, 1].plot(np.flip(double_date), np.flip(
+        interlaced), label='S&P 500', color='black')
     print(np.shape(paths[0]))
     axs[0, 1].set_xticks([])
 
     zoom_factory(axs[0, 1])
     rebind_pan_to_middle_click()
-    
+
     plt.show()
     fig.savefig('savedfig.png')
 
