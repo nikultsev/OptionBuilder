@@ -8,6 +8,11 @@ import sympy
 from zoom_function import zoom_factory, rebind_pan_to_middle_click
 from derivative_classes import *  # ignores __main__ still
 
+# Plan: test the payout of different (individual or combined) options for a fixed time on the S and P 500 (or other
+# radomly generated ones). I want the ability to set the point in time we are beginning
+# the strategy from, imput the expiritation(s) of the strategy, and optinally block out
+# future S and P 500 trading data
+
 
 def generate_paths(S0, r, sigma, T, M, I):
     # S0 initial stock value, r risk free rate, sigma volatility, T final time horizon, M number of time steps, I number of paths to be generated
