@@ -63,9 +63,22 @@ class OptionPrices:
         # print(cost(self.r, self.T, self.t))
         return cost(self.r, self.T, self.t)
 
+    def CallOption(self):
+        self._N()
+        pass
+
+    def PutOption(self):
+        self._N()
+        pass
 
 def main():
     # T and t are in years, sigma is percentile
+
+    def stock_test():
+        pass
+
+    def cash_test():
+        pass
 
     def binary_option_test():
         test = OptionPrices(r=0.05, S=100, t=0, T=1, sigma=0.1)
@@ -86,8 +99,21 @@ def main():
         plt.title('Binary Option Cost')
         plt.legend()
         plt.show()
+
+
+    def call_option_test():
+        pass
+
+    def put_option_test():
+        pass
+
+    def combination_test():
+        pass
     
     binary_option_test()
+    #call_option_test
+
+
     # print(costs)
 
 
