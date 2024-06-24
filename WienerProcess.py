@@ -14,6 +14,15 @@ from tqdm import tqdm
 # the strategy from, imput the expiritation(s) of the strategy, and optinally block out
 # future S and P 500 trading data
 
+dtype = [('Date', 'U10'), ('Close/Last', 'f8'),
+         ('Open', 'f8'), ('High', 'f8'), ('Low', 'f8')]
+data = np.genfromtxt('HistoricalData_1717244350919.csv',
+                     delimiter=',', dtype=dtype, names=True, encoding='utf-8')
+yearly_trading_days = 252
+open_prices = data['Open']
+close_prices = data['CloseLast']
+average_daily_prices_10_years = (open_prices + close_prices)/2
+
 
 def generate_paths(S0, r, sigma, T, M, I):
     # S0 initial stock value, r risk free rate, sigma volatility, T final time horizon, M number of time steps, I number of paths to be generated
@@ -30,22 +39,55 @@ def generate_paths(S0, r, sigma, T, M, I):
     return paths
 
 
+def evolve_stock_market(dataset, start_date, expiry_date, option_product):
+    # choose start date, stock dataset,option_product, and its expiry and observe the
+    # value of your position evolve as we progress along the dataset
+
+    pass
+
+
 def main():
 
+    def call_price_ledger(day):
+
+        # calculate price of calls for the 252nd trade day, 5 percent increments
+
+        day = day-1
+
+        test_volatility = np.std(average_daily_prices_10_years[0:251])
+
+        spot_price = average_daily_prices_10_years[day]
+
+        option_class = OptionPrices(S=spot_price, r=0.03,
+                                t=1, T=1.25, sigma=test_volatility)
+        
+        strikes = np.linspace(0 * spot_price, 10 * spot_price, 20)
+
+        prices = np.empty((len(strikes), 1))
+
+        for i, strike in enumerate(strikes):
+            print(strike,option_class.CallOption(E = strike)) # price is same
+            prices[i] = option_class.CallOption(E = strike)
+            
+        print(prices)
+
+
+
+        
+
+        print(np.shape(average_daily_prices_10_years))
+
+        pass
+
+    call_price_ledger(252)
+
+    def call_and_put_play():
+
+        pass
+
     def open_close_average():
-        dtype = [('Date', 'U10'), ('Close/Last', 'f8'),
-                 ('Open', 'f8'), ('High', 'f8'), ('Low', 'f8')]
-        data = np.genfromtxt('HistoricalData_1717244350919.csv',
-                             delimiter=',', dtype=dtype, names=True, encoding='utf-8')
 
         fig, axs = plt.subplots(2, 3)
-
-        yearly_trading_days = 252
-
-        open_prices = data['Open']
-        close_prices = data['CloseLast']
-
-        average_daily_prices_10_years = (open_prices + close_prices)/2
 
         axs[0, 1].plot(np.linspace(1, 252, 251), np.flip(
             average_daily_prices_10_years[0:yearly_trading_days-1]))
@@ -54,11 +96,9 @@ def main():
         rebind_pan_to_middle_click()
         plt.show()
 
-        # 
+        #
 
         # print(np.shape(open_prices), np.shape(close_prices), np.shape(average_daily_price))
-
-    open_close_average()
 
     def open_close_diff():
         dtype = [('Date', 'U10'), ('Close/Last', 'f8'),
